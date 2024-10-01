@@ -59,27 +59,16 @@ int main(int argc, char **argv)
     for (i = 0; i < world_size; i++) {
         if (world_rank == i) {
 
-            /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            ~~~~~~~~~~~~~~Complete: ~~~~~~~~~~~~~~~~
-
-            MPI_Send();
-
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+            MPI_Send(&buf, 1, MPI_CHAR, (i+1) % world_size,0 ,MPI_COMM_WORLD);
 
         } else if (world_rank == (i+1) % world_size) {
 
-            /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            ~~~~~~~~~~~~~~Complete: ~~~~~~~~~~~~~~~~
-
-            MPI_Recv();
-
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+            MPI_Recv(&buf, 1, MPI_CHAR, i, 0, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
 
             garble(buf);
             printf("MPI rank %d received message: %s\n", world_rank, buf);
-        }
+	    
+	}
         MPI_Barrier(MPI_COMM_WORLD);
     }
 
